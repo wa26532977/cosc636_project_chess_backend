@@ -42,7 +42,7 @@ io.on("connection", client => {
         if (lobby[gameTableId][whichSide] === null) {
             lobby[gameTableId][whichSide] = livePlayer[client.id]
         }
-        console.log(lobby[gameTableId][whichSide])
+        // console.log(lobby[gameTableId][whichSide])
         // update the lobby
         io.emit('lobby_update', lobby, livePlayer)
     })
@@ -56,7 +56,19 @@ io.on("connection", client => {
         remove_sit(client.id)
         delete livePlayer[client.id]
         io.emit('lobby_update', lobby, livePlayer)
-    });
+    })
+
+    client.on('ask_opponent', (opponentName) => {
+        const opponent_id = Object.keys(livePlayer).find(key => livePlayer[key] === opponentName)
+        console.log(opponent_id)
+        io.to(opponent_id).emit("asked_by_opponent", client.id)
+
+    })
+
+    client.on('start_game', (opponent_id, opponent_color) => {
+        console.log(opponent_id, client.id)
+        io.to(opponent_id).emit('start_game', opponent_color)
+    })
 })
 
 server.listen(process.env.PORT || 8000)
