@@ -58,10 +58,10 @@ io.on("connection", client => {
         io.emit('lobby_update', lobby, livePlayer)
     })
 
-    client.on('ask_opponent', (opponentName) => {
+    client.on('ask_opponent', (opponentName, tableId) => {
         const opponent_id = Object.keys(livePlayer).find(key => livePlayer[key] === opponentName)
         console.log(opponent_id)
-        io.to(opponent_id).emit("asked_by_opponent", client.id)
+        io.to(opponent_id).emit("asked_by_opponent", client.id, tableId)
 
     })
 
