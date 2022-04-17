@@ -65,9 +65,15 @@ io.on("connection", client => {
 
     })
 
-    client.on('start_game', (opponent_id, opponent_color) => {
+    client.on('start_game', (opponent_id, opponent_color, tableId) => {
         console.log(opponent_id, client.id)
-        io.to(opponent_id).emit('start_game', opponent_color)
+        io.to(opponent_id).emit('start_game', opponent_color, tableId)
+    })
+
+    client.on('new move', (move) => {
+        console.log(move)
+        const opponentId = move.opponentId
+        io.to(opponentId).emit('opponent move', move)
     })
 })
 
