@@ -29,7 +29,7 @@ function remove_sit(clientId) {
 
 
 io.on("connection", client => {
-    console.log('a user connected');
+    // console.log('a user connected');
     client.on("user_join_lobby", userName => {
         livePlayer[client.id] = userName
         io.emit('lobby_update', lobby, livePlayer)
@@ -60,18 +60,18 @@ io.on("connection", client => {
 
     client.on('ask_opponent', (opponentName, tableId) => {
         const opponent_id = Object.keys(livePlayer).find(key => livePlayer[key] === opponentName)
-        console.log(opponent_id)
+        // console.log(opponent_id)
         io.to(opponent_id).emit("asked_by_opponent", client.id, tableId)
 
     })
 
     client.on('start_game', (opponent_id, opponent_color, tableId) => {
-        console.log(opponent_id, client.id)
+        // console.log(opponent_id, client.id)
         io.to(opponent_id).emit('start_game', opponent_color, tableId)
     })
 
     client.on('new move', (move) => {
-        console.log(move)
+        // console.log(move)
         const opponentId = move.opponentId
         io.to(opponentId).emit('opponent move', move)
     })
